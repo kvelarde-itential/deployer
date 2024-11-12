@@ -4,7 +4,7 @@
 - name: Download archive files local
   ansible.builtin.include_tasks:
     file: upload-platform-archive-from-local.yml
-  when: iap_bin_file is defined or iap_tar_file is defined
+  when: iap_bin_file is defined or iap_tar_file is defined or iap_rpm_file is defined
 
 - name: Download archive files repository
   ansible.builtin.include_tasks:
@@ -19,19 +19,26 @@
 # the bin file. Just extract the tar from the bin and perform the rest of the
 # upgrade with this role for transparency. If the extracted directory already
 # exists then do nothing (creates).
-- name: Extract the bin file contents
+- name: Extract the IAP bin file
   ansible.builtin.command:
     cmd: "{{ iap_install_dir }}/{{ iap_bin_file }} -ey -d {{ iap_install_dir }}"
     chdir: "{{ iap_install_dir }}"
     creates: "{{ iap_install_dir }}/{{ iap_package_name }}"
   when: iap_bin_file is defined
 
-- name: Extract the tar file contents
+- name: Extract the IAP tar file
   ansible.builtin.unarchive:
     src: "{{ iap_install_dir }}/{{ iap_tar_file }}"
     dest: "{{ iap_install_dir }}"
     remote_src: true
   when: iap_tar_file is defined
+
+- name: Install the IAP rpm file
+  ansible.builtin.dnf:
+    name: "{{ iap_install_dir }}/{{ iap_rpm_file }}"
+    disable_gpg_check: true
+    state: present
+  when: iap_rpm_file is defined
 
 - name: Create the "current" symlink
   ansible.builtin.file:
@@ -44,14 +51,20 @@
 - name: Remove the source file
   when: remove_iap_source_file | bool
   block:
-    - name: Remove the bin file
+    - name: Remove the IAP bin file
       ansible.builtin.file:
         path: "{{ iap_install_dir }}/{{ iap_bin_file }}"
         state: absent
       when: iap_bin_file is defined
 
-    - name: Remove the tar file
+    - name: Remove the IAP tar file
       ansible.builtin.file:
         path: "{{ iap_install_dir }}/{{ iap_tar_file }}"
         state: absent
       when: iap_tar_file is defined
+
+    - name: Remove the IAP rpm file
+      ansible.builtin.file:
+        path: "{{ iap_install_dir }}/{{ iap_rpm_file }}"
+        state: absent
+      when: iap_rpm_file is defined

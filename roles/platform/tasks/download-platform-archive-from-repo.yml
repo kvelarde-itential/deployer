@@ -24,21 +24,39 @@
   ansible.builtin.set_fact:
     downloaded_file: "{{ download_result.dest | basename }}"
 
-- name: Set iap_bin_file if the downloaded file is a bin file
-  ansible.builtin.set_fact:
-    iap_bin_file: "{{ downloaded_file }}"
+- name: Set package variables when installing from bin file
   when: downloaded_file.endswith('.bin')
+  block:
+    - name: Set bin file name
+      ansible.builtin.set_fact:
+        iap_bin_file: "{{ downloaded_file }}"
 
-- name: Set iap_tar_file if the downloaded file is a tar.gz file
-  ansible.builtin.set_fact:
-    iap_tar_file: "{{ downloaded_file }}"
+    - name: Set package name when installing from bin file
+      ansible.builtin.set_fact:
+        iap_package_name: "{{ downloaded_file.split('.linux.x86_64.bin')[0] }}"
+
+- name: Set package variables when installing from tar file
   when: downloaded_file.endswith('.tar.gz')
+  block:
+    - name: Set tar file name
+      ansible.builtin.set_fact:
+        iap_tar_file: "{{ downloaded_file }}"
 
-- name: Determine package name from the downloaded file
-  ansible.builtin.set_fact:
-    iap_package_name: >-
-      {%- if downloaded_file.endswith('.bin') -%}
-        {{ downloaded_file.split('.linux.x86_64.bin')[0] }}
-      {%- elif downloaded_file.endswith('.tar.gz') -%}
-        {{ downloaded_file.split('.linux.x86_64.tar.gz')[0] }}
-      {%- endif -%}
+    - name: Set package name when installing from tar file
+      ansible.builtin.set_fact:
+        iap_package_name: "{{ downloaded_file.split('.linux.x86_64.tar.gz')[0] }}"
+
+- name: Set package variables when installing from tar file
+  when: downloaded_file.endswith('.rpm')
+  block:
+    - name: Set rpm file name
+      ansible.builtin.set_fact:
+        iap_rpm_file: "{{ downloaded_file }}"
+
+    - name: Set package name when installing from rpm file
+      ansible.builtin.set_fact:
+        iap_package_name: "{{ downloaded_file.split('-')[3] }}"
+
+    - name: Set install directory when installing from an rpm
+      ansible.builtin.set_fact:
+        iap_install_dir: "/opt/itential/platform"

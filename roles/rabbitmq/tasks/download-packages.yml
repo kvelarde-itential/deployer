@@ -22,8 +22,8 @@
 
 - name: Check for valid RabbitMQ release
   ansible.builtin.fail:
-    msg: "Deployer installer does not support installing RabbitMQ on IAP version {{ iap_release }}"
-  when: invalid_rabbitmq_packages is defined
+    msg: "Deployer installer does not support installing RabbitMQ for IAP version {{ iap_release }}"
+  when: rabbitmq_invalid_release is defined
 
 - name: Import PackageCloud signing key
   ansible.builtin.rpm_key:

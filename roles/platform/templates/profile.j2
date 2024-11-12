@@ -182,7 +182,11 @@
   },
   "pathProps": {
     "description": "File Path Variables",
+    {% if platform_encrypt_pathprops is defined %}
+    "encrypted": {{ platform_encrypt_pathprops | bool | to_json }}
+    {% else %}
     "encrypted": true
+    {% endif %}
   },
   "prebuiltProps": {
     "repoConfigs": {
