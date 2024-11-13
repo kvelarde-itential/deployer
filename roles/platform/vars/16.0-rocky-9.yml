@@ -36,4 +36,9 @@ mongodb_tools_packages:
 
 mongo_shell: mongosh
 
+# For IAP release 16.0, the installation directory and the services directory are set in the RPM
+# and therefore cannot be changed in the inventory
+iap_install_dir: "/opt/itential/platform"
+iap_services_dir: "{{ iap_install_dir }}/services"
+
 platform_encrypt_pathprops: false

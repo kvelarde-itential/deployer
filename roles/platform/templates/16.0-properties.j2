@@ -50,6 +50,7 @@ defined in the host file.
 {% endif %}
 {
   "id": "{{ profile_name }}",
+  "servicesDir": "{{ iap_services_dir }}",
   "mongoProps": {
     "credentials": {
       "dbAuth": {{ mongodb_auth | bool | to_json }},

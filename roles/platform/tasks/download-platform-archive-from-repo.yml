@@ -56,7 +56,3 @@
     - name: Set package name when installing from rpm file
       ansible.builtin.set_fact:
         iap_package_name: "{{ downloaded_file.split('-')[3] }}"
-
-    - name: Set install directory when installing from an rpm
-      ansible.builtin.set_fact:
-        iap_install_dir: "/opt/itential/platform"

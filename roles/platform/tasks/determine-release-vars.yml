@@ -32,11 +32,6 @@
         iap_release: "{{ iap_rpm_file.split('-')[2] }}"
       when: iap_rpm_file is defined
 
-- name: Set install directory when installing from an rpm
-  ansible.builtin.set_fact:
-    iap_install_dir: "/opt/itential/platform"
-  when: iap_rpm_file is defined
-
 - name: Include release vars
   ansible.builtin.include_vars:
     file: "{{ item }}"
