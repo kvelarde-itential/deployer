@@ -1,10 +1,47 @@
 # Copyright (c) 2024, Itential, Inc
 # GNU General Public License v3.0+ (see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt)
 ---
-- name: Install base OS packages
-  ansible.builtin.include_role:
-    name: os
-  tags: install_base_os_packages
+- name: Validate installation variables
+  ansible.builtin.assert:
+    that: iap_release is defined or vault_packages is defined
+    msg: "Either iap_release or vault_packages must be defined"
+  tags: always
+
+- name: Set installation variables when using IAP release defaults
+  when: iap_release is defined
+  tags: always
+  block:
+    - name: Load release default variables
+      ansible.builtin.include_vars:
+        file: "{{ item }}"
+      with_first_found:
+        - "release-{{ iap_release }}.yml"
+        - "release-undefined.yml"
+
+    - name: Check for valid Vault release
+      ansible.builtin.assert:
+        that: vault_invalid_release is not defined
+        msg: "Deployer does not support installing Vault for IAP version {{ iap_release }}"
+
+    - name: Set vault_packages to the default value when not defined in inventory
+      ansible.builtin.set_fact:
+        vault_packages: "{{ vault_packages_default[ansible_distribution_major_version] }}"
+      when: vault_packages is not defined
+
+- name: Print vault_packages
+  ansible.builtin.debug:
+    var: vault_packages
+  when: vault_packages is defined
+
+# - name: Exit
+#   ansible.builtin.fail:
+#     msg: Exiting...
+#   when: true
+
+# - name: Install base OS packages
+#   ansible.builtin.include_role:
+#     name: os
+#   tags: install_base_os_packages
 
 - name: Include tasks to install vault (online)
   ansible.builtin.include_tasks:

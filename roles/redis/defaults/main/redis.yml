@@ -1,6 +1,10 @@
 # Copyright (c) 2024, Itential, Inc
 # GNU General Public License v3.0+ (see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt)
 ---
+# The location of the Redis binary
+# redis_bin_dir: /usr/bin
+redis_bin_dir: "{{ redis_install_from_source | bool | ternary('/usr/local/bin', '/usr/bin') }}"
+
 # The location of the Redis config file
 redis_conf_path: /etc/redis
 redis_conf_file: "{{ redis_conf_path }}/redis.conf"
@@ -38,14 +42,3 @@ redis_bind_addr_source: inventory_hostname
 # The inventory_hostname or default_ipv4_address will be automatically added
 # to the redis_bind_addrs depending on the redis_bind_addr_source.
 redis_bind_addrs: 127.0.0.1
-
-# Offline install settings
-# Refer to the offline variables in common_vars for additional settings
-packages_path: "{{ itential_packages_path }}/{{ iap_release }}/redis"
-
-# Redis install method - string.
-# The valid values are 'remi_repo' (default) or 'source'.
-redis_install_method: source
-
-# The EPEL repo is only required when the redis_install_method is set to 'remi_repo'
-redis_epel_repo_url: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"

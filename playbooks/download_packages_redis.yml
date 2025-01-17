@@ -12,5 +12,5 @@
     - name: Download Redis packages
       ansible.builtin.import_role:
         name: itential.deployer.redis
-        tasks_from: download-packages
+        tasks_from: download_packages
       run_once: true
