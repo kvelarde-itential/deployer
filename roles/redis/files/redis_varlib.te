@@ -20,3 +20,4 @@ allow redis_t unreserved_port_t:tcp_socket name_bind;
 allow redis_t var_lib_t:dir { add_name write };
 allow redis_t var_lib_t:file { getattr read };
 allow redis_t var_log_t:file open;
+allow redis_t var_log_t:dir write;
