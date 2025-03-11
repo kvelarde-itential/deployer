@@ -22,8 +22,9 @@
 
 - name: Check supported OS
   ansible.builtin.fail:
-    msg: "Deployer does not support installing on {{ ansible_distribution }} {{ ansible_distribution_major_version }}!"
-  when: invalid_os_release is defined
+    msg: "Deployer does not support installing on {{ ansible_distribution }}
+         {{ ansible_distribution_major_version }}!"
+  when: os_invalid_release is defined
 
 - name: Download OS RPMs
   ansible.builtin.import_role:
@@ -40,7 +41,7 @@
     tasks_from: download-rpms
   vars:
     offline_download_method: yum_module
-    offline_download_packages: "{{ security_packages }}"
+    offline_download_packages: "{{ os_os_security_packages }}"
     offline_download_dir: "{{ os_offline_target_node_rpms_dir }}"
 
 - name: Download operations RPMs
@@ -49,7 +50,7 @@
     tasks_from: download-rpms
   vars:
     offline_download_method: yum_module
-    offline_download_packages: "{{ operational_packages }}"
+    offline_download_packages: "{{ os_operational_packages }}"
     offline_download_dir: "{{ os_offline_target_node_rpms_dir }}"
 
 - name: Copy RPMs to control node

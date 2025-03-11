@@ -11,10 +11,10 @@
 
 - name: Install Security Packages
   ansible.builtin.dnf:
-    name: "{{ security_packages }}"
+    name: "{{ os_security_packages }}"
     state: present
 
 - name: Install Operations Packages
   ansible.builtin.dnf:
-    name: "{{ operational_packages }}"
+    name: "{{ os_operational_packages }}"
     state: present
