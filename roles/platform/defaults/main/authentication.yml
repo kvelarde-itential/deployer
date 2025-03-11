@@ -8,7 +8,8 @@ platform_auth_unique_sessions_enabled: false
 platform_auth_admin_groups:
   # - { "provenance": "Local AAA", "group": "pronghorn_admin" }
 
-# Enables a AAA adapter to custom build the principal object for a user with a "buildPrincipal" method.
+# Enables a AAA adapter to custom build the principal object for a user
+# with a "buildPrincipal" method.
 platform_auth_broker_principal_enabled: false
 
 # The name of the cookie used for a user session.

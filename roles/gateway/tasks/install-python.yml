@@ -16,7 +16,9 @@
 
 - name: Include the virtual environment in default shell
   ansible.builtin.shell:
-    cmd: echo source {{ gateway_install_dir }}/{{ gateway_venv_name }}/bin/activate > /etc/profile.d/venv.sh
+    cmd: >
+      echo source {{ gateway_install_dir }}/{{ gateway_venv_name }}/bin/activate
+      > /etc/profile.d/venv.sh
   changed_when: true
 
 - name: Install Python dependencies

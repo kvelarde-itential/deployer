@@ -101,7 +101,8 @@
 
         - name: Set platform_nodejs_repo_url to the default value when not defined in inventory
           ansible.builtin.set_fact:
-            platform_nodejs_repo_url: "{{ platform_nodejs_repo_url_default[ansible_distribution_major_version] }}"
+            platform_nodejs_repo_url:
+              "{{ platform_nodejs_repo_url_default[ansible_distribution_major_version] }}"
           when:
             - platform_nodejs_repo_url is not defined
             - platform_nodejs_repo_url_default[ansible_distribution_major_version] is defined
